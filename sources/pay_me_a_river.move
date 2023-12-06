@@ -51,7 +51,15 @@ module overmind::pay_me_a_river {
         assert!(signer_address != sender_address && signer_address != receiver_address, ESIGNER_ADDRESS_IS_NOT_SENDER_OR_RECEIVER);
     }
 
-    inline fun calculate_stream_claim_amount(total_amount: u64, start_time: u64, length_in_seconds: u64): u64 {}
+    inline fun calculate_stream_claim_amount(total_amount: u64, start_time: u64, length_in_seconds: u64): u64 {
+        let now = timestamp::now_seconds();
+        let end_time = start_time + length_in_seconds;
+        if (now < end_time) {
+            total_amount * (now - start_time) / length_in_seconds
+        } else {
+            total_amount
+        }
+    }
 
     public entry fun create_stream(
         signer: &signer,
