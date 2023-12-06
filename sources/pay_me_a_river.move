@@ -30,7 +30,9 @@ module overmind::pay_me_a_river {
         assert!(number > 0, ENUMBER_INVALID);
     }
 
-    inline fun check_payment_exists(sender_address: address) {}
+    inline fun check_payment_exists(sender_address: address) {
+        assert!(exists<Payments>(sender_address), EPAYMENT_DOES_NOT_EXIST);
+    }
 
     inline fun check_stream_exists(payments: &Payments, stream_address: address) {}
 
