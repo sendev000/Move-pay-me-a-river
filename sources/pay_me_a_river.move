@@ -34,7 +34,9 @@ module overmind::pay_me_a_river {
         assert!(exists<Payments>(sender_address), EPAYMENT_DOES_NOT_EXIST);
     }
 
-    inline fun check_stream_exists(payments: &Payments, stream_address: address) {}
+    inline fun check_stream_exists(payments: &Payments, stream_address: address) {
+        assert!(table::contains(payments, stream_address), ESTREAM_DOES_NOT_EXIST);
+    }
 
     inline fun check_stream_is_not_active(payments: &Payments, stream_address: address) {}
 
