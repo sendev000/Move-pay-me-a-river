@@ -38,7 +38,10 @@ module overmind::pay_me_a_river {
         assert!(table::contains(payments, stream_address), ESTREAM_DOES_NOT_EXIST);
     }
 
-    inline fun check_stream_is_not_active(payments: &Payments, stream_address: address) {}
+    inline fun check_stream_is_not_active(payments: &Payments, stream_address: address) {
+        let stream = table::borrow(payments, stream_address);
+        assert!(stream.start_time == 0, ESTREAM_IS_ACTIVE);
+    }
 
     inline fun check_signer_address_is_sender_or_receiver(
         signer_address: address,
