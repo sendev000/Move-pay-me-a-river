@@ -47,7 +47,9 @@ module overmind::pay_me_a_river {
         signer_address: address,
         sender_address: address,
         receiver_address: address
-    ) {}
+    ) {
+        assert!(signer_address != sender_address && signer_address != receiver_address, ESIGNER_ADDRESS_IS_NOT_SENDER_OR_RECEIVER);
+    }
 
     inline fun calculate_stream_claim_amount(total_amount: u64, start_time: u64, length_in_seconds: u64): u64 {}
 
