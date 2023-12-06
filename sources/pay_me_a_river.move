@@ -27,7 +27,7 @@ module overmind::pay_me_a_river {
     }
 
     inline fun check_number_is_valid(number: u64) {
-        
+        assert!(number > 0, ENUMBER_INVALID);
     }
 
     inline fun check_payment_exists(sender_address: address) {}
