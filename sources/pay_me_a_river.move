@@ -1,7 +1,8 @@
 module overmind::pay_me_a_river {
-    use aptos_std::table::Table;
+    use aptos_std::table::{Self Table};
     use aptos_framework::aptos_coin::AptosCoin;
     use aptos_framework::coin::Coin;
+    use aptos_framework::timestamp;
 
     const ESENDER_CAN_NOT_BE_RECEIVER: u64 = 1;
     const ENUMBER_INVALID: u64 = 2;
