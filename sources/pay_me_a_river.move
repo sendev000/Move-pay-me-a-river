@@ -22,9 +22,13 @@ module overmind::pay_me_a_river {
         streams: Table<address, Stream>,
     }
 
-    inline fun check_sender_is_not_receiver(sender: address, receiver: address) {}
+    inline fun check_sender_is_not_receiver(sender: address, receiver: address) {
+        assert!(sender != receiver, ESENDER_CAN_NOT_BE_RECEIVER);
+    }
 
-    inline fun check_number_is_valid(number: u64) {}
+    inline fun check_number_is_valid(number: u64) {
+        
+    }
 
     inline fun check_payment_exists(sender_address: address) {}
 
