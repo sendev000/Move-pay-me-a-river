@@ -67,7 +67,15 @@ module overmind::pay_me_a_river {
         receiver_address: address,
         amount: u64,
         length_in_seconds: u64
-    ) acquires Payments {}
+    ) acquires Payments {
+        let signer_address = signer::address_of(singer);
+        
+        check_sender_is_not_receiver(signer_address, receiver_address);
+        check_number_is_valid(amount);
+        check_number_is_valid(length_in_seconds);
+
+        
+    }
 
     public entry fun accept_stream(signer: &signer, sender_address: address) acquires Payments {}
 
