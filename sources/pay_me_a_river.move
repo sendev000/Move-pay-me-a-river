@@ -85,7 +85,7 @@ module overmind::pay_me_a_river {
             sender: signer_address,
             receiver: receiver_address,
             length_in_seconds: length_in_seconds,
-            start_time: timestamp::now_seconds(),
+            start_time: 0,
             coins: coin::withdraw<AptosCoin>(signer, amount),
         };
 
@@ -93,7 +93,18 @@ module overmind::pay_me_a_river {
         table::add(&mut payments.streams, receiver_address, stream);
     }
 
-    public entry fun accept_stream(signer: &signer, sender_address: address) acquires Payments {}
+    public entry fun accept_stream(signer: &signer, sender_address: address) acquires Payments {
+        let receiver_address = signer::address_of(signer);
+        check_payment_exists(sender_address);
+        let payments = borrow_global_mut<Payments>(sender_address);
+        check_stream_exists(payments, receiver_address);
+        check_stream_is_not_active(payments, receiver_address);
+
+        let stream = table::borrow_mut(&mut payments.streams, receiver_address);
+
+        stream.start_time = timestamp::now_seconds();
+        
+    }
 
     public entry fun claim_stream(signer: &signer, sender_address: address) acquires Payments {}
 
@@ -102,7 +113,7 @@ module overmind::pay_me_a_river {
         sender_address: address,
         receiver_address: address
     ) acquires Payments {
-
+        
     }
 
     #[view]
