@@ -111,7 +111,7 @@ module overmind::pay_me_a_river {
         let payments = borrow_global_mut<Payments>(sender_address);
         check_stream_exists(payments, receiver_address);
         check_sender_is_not_receiver(signer);
-        
+
         let stream = table::borrow_mut(&mut payments, receiver_address);
 
         let claim_amount = calculate_stream_claim_amount(coin::value(&stream.coins), stream.start_time, stream.length_in_seconds);
@@ -128,7 +128,20 @@ module overmind::pay_me_a_river {
         sender_address: address,
         receiver_address: address
     ) acquires Payments {
-        
+        let signer_address = signer::address_of(signer);
+        check_signer_address_is_sender_or_receiver(signer_address, sender_address, receiver_address);
+        check_stream_store_exists(sender_address);
+        let payments = borrow_global_mut<StreamStore>(sender_address);
+        check_stream_exists(payments, receiver_address);
+
+        let stream = table::borrow_mut(&payments.stream, receiver_address);
+
+        if (stream.start_time == 0) {
+            coin::deposit(sender_address, stream.coin);
+        } else {
+            let amount_to_receive = calculate_stream_claim_amount(coin::value(&stream.coins), stream.start_time, stream.length_in_seconds);
+            coin::deposit(sender_address, coin::extract(&mut stream.coins, amount_to_receive));
+        }
     }
 
     #[view]
