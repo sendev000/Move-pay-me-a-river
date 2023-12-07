@@ -116,7 +116,7 @@ module overmind::pay_me_a_river {
 
         let claim_amount = calculate_stream_claim_amount(coin::value(stream.coins), stream.start_time, stream.length_in_seconds);
 
-        
+
     }
 
     public entry fun cancel_stream(
@@ -129,6 +129,7 @@ module overmind::pay_me_a_river {
 
     #[view]
     public fun get_stream(sender_address: address, receiver_address: address): (u64, u64, u64) acquires Payments {
-
+        let stream = borrow_global<Payments>(sender_address);
+        table::borrow(&stream, receiver_address);
     }
 }
