@@ -110,8 +110,8 @@ module overmind::pay_me_a_river {
         check_payment_exists(sender_address);
         let payments = borrow_global_mut<Payments>(sender_address);
         check_stream_exists(payments, receiver_address);
-        check_stream_is_not_active(payments, receiver_address);
-
+        check_sender_is_not_receiver(signer);
+        
         let stream = table::borrow_mut(&mut payments, receiver_address);
 
         let claim_amount = calculate_stream_claim_amount(coin::value(&stream.coins), stream.start_time, stream.length_in_seconds);
